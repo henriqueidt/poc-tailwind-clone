@@ -1,12 +1,16 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
     "module": "commonjs",
-    "target": "es5",
-    "allowJs": true,
-    "moduleResolution": "node"
+    "esModuleInterop": true,
+    "target": "es6",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*"]
+    }
   },
-  "include": ["./src/**/*"]
-  // "files": ["src/index.ts"]
+  "include": ["src/**/*"]
 }
