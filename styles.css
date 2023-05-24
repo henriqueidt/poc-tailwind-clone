@@ -1,0 +1,18 @@
+.DocSearch-Input {
+  border: 1px solid green;
+}
+
+.class2 {
+  font-size: 2rem;
+  color: yellow;
+}
+
+.class5 {
+  font-weight: bold;
+}
+
+@media (min-width: 700px) {
+  .class2 {
+    font-size: 3rem;
+  }
+}

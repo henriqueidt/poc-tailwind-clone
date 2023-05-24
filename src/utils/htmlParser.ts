@@ -1,11 +1,11 @@
 const parse5 = require("parse5");
 import * as htmlparser2 from "parse5-htmlparser2-tree-adapter";
+import { Iselectors } from "../types";
 
-interface Iresult {
-  classes: string[];
-}
-
-const appendEntrySelectorsToResult = (result: Iresult, entry: Iresult) => {
+const appendEntrySelectorsToResult = (
+  result: Iselectors,
+  entry: Iselectors
+) => {
   return {
     classes: [...result.classes, ...entry.classes],
   };
@@ -13,10 +13,10 @@ const appendEntrySelectorsToResult = (result: Iresult, entry: Iresult) => {
 
 const getSelectorsFromNodes = (
   node: htmlparser2.Htmlparser2TreeAdapterMap["element"]
-): Iresult => {
+): Iselectors => {
   const { childNodes } = node;
 
-  let result: Iresult = {
+  let result: Iselectors = {
     classes: [],
   };
 
@@ -35,8 +35,8 @@ const getSelectorsFromNodes = (
 
 const getSelectorsFromElement = (
   element: htmlparser2.Htmlparser2TreeAdapterMap["element"]
-): Iresult => {
-  let result: Iresult = {
+): Iselectors => {
+  let result: Iselectors = {
     classes: [],
   };
 
@@ -49,13 +49,11 @@ const getSelectorsFromElement = (
   return appendEntrySelectorsToResult(getSelectorsFromNodes(element), result);
 };
 
-function getSelectorsFromHtml(html: string) {
+const getSelectorsFromHtml = (html: string) => {
   const parsedHtml = parse5.parse(html, {
     treeAdapter: htmlparser2.adapter,
   });
-  const result = getSelectorsFromNodes(parsedHtml);
+  return getSelectorsFromNodes(parsedHtml);
+};
 
-  console.log("final result", result);
-}
-
-module.exports = getSelectorsFromHtml;
+export { getSelectorsFromHtml };
