@@ -4,21 +4,27 @@
     <meta charset="utf-8" />
     <title>Webpack App</title>
     <link rel="stylesheet" href="/parsedStyles.css" />
-    <script>
-      const socket = new WebSocket("ws://localhost:3000");
-
-      socket.addEventListener("message", (event) => {
-        if (event.data === "reload") {
-          location.reload();
-        }
-      });
-    </script>
   </head>
   <body style="background-color: black; color: coral">
-    <div class="DocSearch-Input">
-      <h1>Hello worldssssasaan sdasasdas!</h1>
-      <h2>Tip: Check yourse consoles</h2>
-      <div class="class1 class2 class3">test div</div>
+    <div id="root">
+      <div class="DocSearch-Input">
+        <form id="myForm">
+          <label for="name">Names:</label>
+          <input type="text" id="name" name="name" required />
+
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+
+          <label for="lastName">Lastssss:</label>
+          <input type="text" id="lastName" name="name" required />
+
+          <label for="lastName">Lastssss:</label>
+          <input type="text" id="lastName" name="name" required />
+
+          <button type="submit">Submit</button>
+        </form>
+      </div>
     </div>
+    <script type="text/javascript" src="index.js"></script>
   </body>
 </html>

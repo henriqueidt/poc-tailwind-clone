@@ -64,8 +64,14 @@ server.listen(port, () => {
       wait = setTimeout(() => {
         wait = false;
       }, 250);
+      const html = fs.readFileSync(filename, "utf8");
       console.log(`${filename} file Changed`);
-      broadcast("reload");
+      broadcast(
+        JSON.stringify({
+          type: "reload",
+          htmlContent: html,
+        })
+      );
       readHtml(filename);
     }
   });
