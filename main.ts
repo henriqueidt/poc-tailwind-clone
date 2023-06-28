@@ -12,6 +12,10 @@ import * as http from "http";
 const htmlUrl = "index.html";
 const cssUrl = "styles.css";
 
+interface CustomWebSocket extends WebSocket {
+  id: number;
+}
+
 const asyncFs = {
   access: promisify(fs.access),
   readFile: promisify(fs.readFile),
@@ -42,9 +46,45 @@ const server = http.createServer(app);
 // Create WebSocket server
 const wsServer = new WebSocket.Server({ server });
 
+let storedFormValues: any = {};
+
 // Start the WebSocket server
-wsServer.on("connection", (ws) => {
+wsServer.on("connection", (ws: CustomWebSocket, req) => {
   wss.emit("connection", ws);
+
+  ws.on("message", (message) => {
+    const data = JSON.parse(message.toString());
+
+    if (data.event === "reload") {
+      console.log("id", data.id);
+      console.log("storedvalues", storedFormValues);
+      if (storedFormValues[data.id]) {
+        broadcast(
+          JSON.stringify({
+            type: "formData",
+            formValues: storedFormValues,
+          })
+        );
+      }
+    }
+
+    if (data.event === "formValues") {
+      const id = data.id;
+      if (
+        storedFormValues[id] &&
+        Object.keys(data.values).length !==
+          Object.keys(storedFormValues[id]).length
+      ) {
+        let resettedValues: any = {};
+        for (let key in data.values) {
+          resettedValues[key] = "";
+        }
+        storedFormValues[id] = resettedValues;
+      } else {
+        storedFormValues[id] = data.values;
+      }
+    }
+  });
 });
 
 const port = 3000;
@@ -64,12 +104,10 @@ server.listen(port, () => {
       wait = setTimeout(() => {
         wait = false;
       }, 250);
-      const html = fs.readFileSync(filename, "utf8");
       console.log(`${filename} file Changed`);
       broadcast(
         JSON.stringify({
           type: "reload",
-          htmlContent: html,
         })
       );
       readHtml(filename);
